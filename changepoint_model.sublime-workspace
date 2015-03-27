@@ -1,0 +1,343 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/home/anh/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
+			"settings":
+			{
+				"buffer_size": 101,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "hmm_example.py",
+			"settings":
+			{
+				"buffer_size": 2797,
+				"line_ending": "Unix",
+				"name": "\"\"\""
+			}
+		},
+		{
+			"file": "/home/anh/projects/tutorial/tutorial/spiders/dmoz_spider.py",
+			"settings":
+			{
+				"buffer_size": 436,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 75.0,
+		"selected_items":
+		[
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"preview",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"package inst",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 139.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/anh/.config/sublime-text-2/Packages/Default/Preferences.sublime-settings",
+		"/home/anh/projects/tutorial/tutorial/items.py",
+		"/home/anh/Desktop/MCMCpack/src/MCMCpoissonChange.cc",
+		"/home/anh/projects/sta-663-anh-le/remove_output.py",
+		"/home/anh/projects/sta-663-anh-le/Labs/Lab07/Exercise07.ipynb",
+		"/home/anh/projects/tutorial/tutorial/spiders/dmoz_spider.py",
+		"/home/anh/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
+		"/home/anh/projects/business_confidence/table/pci_treatment_effect.tex",
+		"/home/anh/projects/personal-webpage/_includes/sidebar.html",
+		"/home/anh/projects/personal-webpage/_includes/head.html",
+		"/home/anh/projects/personal-webpage/_posts/2015-02-23-explain-inverse-cdf-method.html",
+		"/home/anh/projects/personal-webpage/_posts/2015-02-01-rstudio-cannot-load-rjava-in-ubuntu.md",
+		"/home/anh/projects/personal-webpage/about.md",
+		"/home/anh/projects/personal-webpage/_posts/2015-02-22-inverse_cdf.md",
+		"/home/anh/projects/paint-by-number.github.io/_layouts/post_animation.html",
+		"/home/anh/projects/paint-by-number.github.io/_posts/blog/2014-12-18-radar-chart.md",
+		"/home/anh/projects/paint-by-number.github.io/_posts/blog/2014-12-10-vietnam-africa-comparison.md",
+		"/home/anh/projects/paint-by-number.github.io/_config.yml",
+		"/home/anh/projects/paint-by-number.github.io/_includes/head.html",
+		"/home/anh/projects/paint-by-number.github.io/_posts/blog/2014-12-12-gower-similarity-coefficient.md",
+		"/home/anh/projects/paint-by-number.github.io/_includes/footer.html",
+		"/home/anh/projects/paint-by-number.github.io/_drafts/draft.md",
+		"/home/anh/projects/paint-by-number.github.io/_drafts/radar_chart.md",
+		"/home/anh/projects/paint-by-number.github.io/_drafts/gower_similarity.md",
+		"/home/anh/projects/paint-by-number.github.io/index.html",
+		"/home/anh/projects/paint-by-number.github.io/about/index.md",
+		"/home/anh/projects/paint-by-number.github.io/_includes/navigation.html",
+		"/home/anh/projects/paint-by-number.github.io/_includes/fork-me-on-github.html",
+		"/home/anh/projects/paint-by-number.github.io/blog/index.md",
+		"/home/anh/projects/paint-by-number.github.io/_includes/social-icons.html",
+		"/home/anh/projects/paint-by-number.github.io/_data/navigation.yml",
+		"/home/anh/projects/paint-by-number.github.io/articles/index.md",
+		"/home/anh/projects/paint-by-number.github.io/_posts/blog/2014-12-12-vietnam-africa-comparison.md",
+		"/home/anh/projects/paint-by-number.github.io/_drafts/vietnam_africa_draft.md",
+		"/home/anh/.config/sublime-text-2/Packages/User/Markdown.sublime-settings",
+		"/home/anh/projects/paint-by-number.github.io/_sass/_layout.scss",
+		"/home/anh/projects/paint-by-number.github.io/_sass/_simple-search.scss",
+		"/home/anh/projects/paint-by-number.github.io/theme-setup/index.md",
+		"/home/anh/projects/paint-by-number.github.io/_data/authors.yml",
+		"/home/anh/projects/paint-by-number.github.io/_posts/blog/2014-08-08-hello-world.md",
+		"/home/anh/projects/paint-by-number.github.io/_layouts/page.html",
+		"/home/anh/projects/paint-by-number.github.io/README.md",
+		"/media/aql3/personal-webpage/contact.html",
+		"/media/aql3/personal-webpage/learning.html",
+		"/media/aql3/ladilettante.github.io/_includes/sidebar.html",
+		"/media/aql3/ladilettante.github.io/_site/statbook/index.html",
+		"/media/aql3/ladilettante.github.io/_config.yml",
+		"/media/aql3/ladilettante.github.io/_includes/footer.html",
+		"/media/aql3/ladilettante.github.io/_includes/head.html"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"pyplot",
+			"pl.",
+			"pl",
+			"of",
+			"ref",
+			"\\href",
+			"\\ref",
+			"body",
+			"math",
+			"index",
+			"canonical",
+			"xml",
+			"site.url",
+			"canonical",
+			"xml",
+			"z-index",
+			"search\n\nsearch",
+			"site.url",
+			"navigation-wrapper",
+			"baseurl",
+			"site.url"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"coefficient",
+			"site.baseurl"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/home/anh/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
+					"settings":
+					{
+						"buffer_size": 101,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								76,
+								76
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "hmm_example.py",
+					"settings":
+					{
+						"buffer_size": 2797,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								700,
+								700
+							]
+						],
+						"settings":
+						{
+							"auto_name": "\"\"\"",
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 105.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/home/anh/projects/tutorial/tutorial/spiders/dmoz_spider.py",
+					"settings":
+					{
+						"buffer_size": 436,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								436,
+								436
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 112.0
+	},
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"confi",
+				"_config.yml"
+			],
+			[
+				"about",
+				"about/index.md"
+			],
+			[
+				"hell",
+				"_posts/blog/2014-08-08-hello-world.md"
+			],
+			[
+				"con",
+				"_config.yml"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 198.0,
+	"status_bar_visible": true
+}
