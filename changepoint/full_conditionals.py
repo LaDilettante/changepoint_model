@@ -80,4 +80,53 @@ def P_sampling(Sn, a, b):
     return P
 
 def S_conditional(Yn, Theta, P):
-    pass
+    '''
+    Create a grid of pmf for Prob(s_t = k | Yn, Theta, P)
+
+    Args
+        Yn: n x 1 data vector
+        Theta: (m + 1) x 1 parameter vector. (m + 1) is no of regimes
+        P: (m + 1) x (m + 1) Markov transition matrix
+
+    Returns
+        the matrix n x (m + 1) matrix F that stores a grid of pmf
+    '''
+    n = len(Yn)
+    m = len(Theta) - 1
+
+    F = np.empty((n, m + 1))
+    F[0, 0] = np.log(1)
+
+    fy = lambda t, k: st.bernoulli.logpmf(Yn[t-1], Theta[k-1])
+
+    for t in range(2, n + 1):
+        d_t = np.array([fy(t, k_) for k_ in range(1, m + 2)])
+        F[t - 1] = ( F[t - 2].dot(P.T) ) * d_t
+
+    return F
+
+def S_sampling(Yn, Theta, P):
+    '''
+    Sample S from the n x (m + 1) grid of pmfs
+
+    Args
+        Yn: n x 1 data vector
+        Theta: (m + 1) x 1 parameter vector. (m + 1) is no of regimes
+        P: (m + 1) x (m + 1) Markov transition matrix
+
+    Returns
+        the n x 1 latent state vector
+        Recall that (m + 1) is the number of regimes
+    '''
+    n = len(Yn)
+    m = len(Theta) - 1
+
+    F = S_conditional(Yn, Theta, P)
+    print np.sum(F, axis=1) # Too small. Numerical issues
+    F = F / np.sum(F, axis=1)[:, np.newaxis]
+    
+    S = np.empty(n)
+    for t in range(1, n + 1):
+        S[t - 1] = np.random.choice(np.arange(1, m + 2), p=F[t - 1])
+
+    return S
