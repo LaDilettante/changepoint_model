@@ -1,6 +1,6 @@
 import numpy as np
 import scipy as sp
-import scipy.stats as sp
+import scipy.stats as st
 
 def P(m):
     '''
@@ -34,7 +34,6 @@ def S(n, m):
     changepoint_locs = np.sort(np.random.choice(np.arange(2, n + 1), size=m, replace=False))
     regime_locs = np.concatenate([[1], changepoint_locs])
 
-    print regime_locs
     return np.concatenate([np.repeat(np.arange(1, m + 1), np.diff(regime_locs)), \
                            np.repeat(m + 1, n - regime_locs[-1] + 1)])
 
