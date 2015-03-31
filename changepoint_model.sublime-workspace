@@ -3,32 +3,64 @@
 	{
 		"selected_items":
 		[
+			[
+				"num",
+				"number_of_regimes"
+			],
+			[
+				"Theta",
+				"Theta_conditional"
+			],
+			[
+				"change",
+				"changepoint_locs"
+			],
+			[
+				"asser",
+				"assert_array_equal"
+			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "/home/anh/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
+			"file": "tests/test_init_functions.py",
 			"settings":
 			{
-				"buffer_size": 101,
+				"buffer_size": 749,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "hmm_example.py",
+			"file": "changepoint/init_functions.py",
 			"settings":
 			{
-				"buffer_size": 2797,
-				"line_ending": "Unix",
-				"name": "\"\"\""
+				"buffer_size": 1379,
+				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/home/anh/projects/tutorial/tutorial/spiders/dmoz_spider.py",
+			"file": "changepoint/full_conditionals.py",
 			"settings":
 			{
-				"buffer_size": 436,
+				"buffer_size": 3538,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "changepoint/sampler.py",
+			"settings":
+			{
+				"buffer_size": 986,
+				"line_ending": "Unix",
+				"name": "import"
+			}
+		},
+		{
+			"file": "tests/test_p_sampling.py",
+			"settings":
+			{
+				"buffer_size": 872,
 				"line_ending": "Unix"
 			}
 		}
@@ -69,13 +101,26 @@
 	},
 	"file_history":
 	[
+		"/home/anh/projects/changepoint_model/tests/test_theta_sampling.py",
+		"/home/anh/projects/changepoint_model/tests/test_p_sampling",
+		"/home/anh/projects/changepoint_model/tests/test_full_conditionals.py",
+		"/home/anh/projects/changepoint_model/tests/__init__.py",
+		"/home/anh/projects/changepoint_model/setup.py",
+		"/home/anh/projects/changepoint_model/changepoint/__init__.py",
+		"/home/anh/projects/changepoint_model/changepoint/MANIFEST.in",
+		"/home/anh/projects/changepoint_model/README.rst",
+		"/home/anh/projects/tutorial/tutorial/spiders/dmoz_spider.py",
+		"/home/anh/projects/changepoint_model/hmm_example.py",
+		"/home/anh/projects/changepoint_model/init_functions.py",
+		"/home/anh/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
+		"/home/anh/projects/changepoint_model/changepoint_model.sublime-project",
+		"/home/anh/.config/sublime-text-2/Packages/SublimeREPL/SublimeREPL.sublime-settings",
+		"/home/anh/.config/sublime-text-2/Packages/User/SublimeREPL.sublime-settings",
 		"/home/anh/.config/sublime-text-2/Packages/Default/Preferences.sublime-settings",
 		"/home/anh/projects/tutorial/tutorial/items.py",
 		"/home/anh/Desktop/MCMCpack/src/MCMCpoissonChange.cc",
 		"/home/anh/projects/sta-663-anh-le/remove_output.py",
 		"/home/anh/projects/sta-663-anh-le/Labs/Lab07/Exercise07.ipynb",
-		"/home/anh/projects/tutorial/tutorial/spiders/dmoz_spider.py",
-		"/home/anh/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
 		"/home/anh/projects/business_confidence/table/pci_treatment_effect.tex",
 		"/home/anh/projects/personal-webpage/_includes/sidebar.html",
 		"/home/anh/projects/personal-webpage/_includes/head.html",
@@ -175,28 +220,30 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "/home/anh/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
+					"file": "tests/test_init_functions.py",
 					"settings":
 					{
-						"buffer_size": 101,
+						"buffer_size": 749,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								76,
-								76
+								40,
+								40
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -206,45 +253,101 @@
 				},
 				{
 					"buffer": 1,
-					"file": "hmm_example.py",
+					"file": "changepoint/init_functions.py",
 					"settings":
 					{
-						"buffer_size": 2797,
+						"buffer_size": 1379,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								700,
-								700
+								62,
+								62
 							]
 						],
 						"settings":
 						{
-							"auto_name": "\"\"\"",
-							"syntax": "Packages/Python/Python.tmLanguage"
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 105.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "/home/anh/projects/tutorial/tutorial/spiders/dmoz_spider.py",
+					"file": "changepoint/full_conditionals.py",
 					"settings":
 					{
-						"buffer_size": 436,
+						"buffer_size": 3538,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								436,
-								436
+								63,
+								63
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "changepoint/sampler.py",
+					"settings":
+					{
+						"buffer_size": 986,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								351,
+								351
+							]
+						],
+						"settings":
+						{
+							"auto_name": "import",
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "tests/test_p_sampling.py",
+					"settings":
+					{
+						"buffer_size": 872,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								814,
+								814
 							]
 						],
 						"settings":
@@ -337,7 +440,7 @@
 	"show_minimap": true,
 	"show_open_files": false,
 	"show_tabs": true,
-	"side_bar_visible": true,
-	"side_bar_width": 198.0,
+	"side_bar_visible": false,
+	"side_bar_width": 326.0,
 	"status_bar_visible": true
 }
