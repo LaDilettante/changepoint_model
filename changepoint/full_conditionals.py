@@ -109,7 +109,7 @@ def S_conditional_lag0(Yn, Theta, P):
     F = np.zeros((n, m + 1))
     F[0, 0] = 1
 
-    fy = lambda t, k: st.bernoulli.logpmf(Yn[t-1], Theta[k-1])
+    fy = lambda t, k: st.bernoulli.pmf(Yn[t-1], Theta[k-1])
 
     for t in range(2, n + 1): # Forward
         d_t = np.array([fy(t, k_) for k_ in range(1, m + 2)])
