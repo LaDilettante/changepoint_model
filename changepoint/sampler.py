@@ -14,33 +14,37 @@ def binary_true_data():
 
 def binary_sampler(Yn):
     # Initialize
-    Sn = init.S(150, 2)
-    P = init.P(3)
+    n = 150
+    m = 2
+
+    Sn = init.S(n, m)
+    P = init.P(m + 1)
     Theta = np.array([0.5, 0.5, 0.5])
     delta = 1
+
 
     # Prior
     a = 8
     b = 0.1
 
     tol = 1e-6
-    max_iter = 5000
+    max_iter = 6000
+    burn_iter = 1000
     i = 0
-    while ( delta > tol ) and (i < max_iter):
-        Theta_old = Theta.copy()
+
+    F_mcmc = np.empty((n, m + 1, max_iter))
+    Theta_mcmc = np.empty((m + 1, max_iter))
+
+    while (i < max_iter):
 
         Sn, F = cond.S_sampling(Yn, Theta, P)
         Theta = cond.Theta_sampling(Yn, Sn)
         P = cond.P_sampling(Sn, a, b)
 
-        delta = np.abs((Theta - Theta_old).sum())
+        F_mcmc[:, :, i] = F
+        Theta_mcmc[:, i] = Theta
         i += 1
-
-        # print i, delta
-        if delta < tol:
-            print "Convergence reached"
-
-    return Sn, F, Theta, P
+    return Sn, F_mcmc, Theta_mcmc, P 
 
 if __name__ == "__main__":
     binary_sampler()

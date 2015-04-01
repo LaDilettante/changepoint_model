@@ -43,7 +43,7 @@
 			"file": "changepoint/full_conditionals.py",
 			"settings":
 			{
-				"buffer_size": 3538,
+				"buffer_size": 3535,
 				"line_ending": "Unix"
 			}
 		},
@@ -284,15 +284,15 @@
 					"file": "changepoint/full_conditionals.py",
 					"settings":
 					{
-						"buffer_size": 3538,
+						"buffer_size": 3535,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								63,
-								63
+								2240,
+								2240
 							]
 						],
 						"settings":
@@ -302,7 +302,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1372.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
