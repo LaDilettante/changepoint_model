@@ -51,7 +51,7 @@
 			"file": "changepoint/sampler.py",
 			"settings":
 			{
-				"buffer_size": 986,
+				"buffer_size": 1002,
 				"line_ending": "Unix",
 				"name": "import"
 			}
@@ -220,7 +220,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -302,7 +302,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1372.0,
+						"translation.y": 82.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -312,15 +312,15 @@
 					"file": "changepoint/sampler.py",
 					"settings":
 					{
-						"buffer_size": 986,
+						"buffer_size": 1002,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								351,
-								351
+								950,
+								950
 							]
 						],
 						"settings":
@@ -331,7 +331,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 295.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

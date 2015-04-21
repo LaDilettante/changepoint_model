@@ -32,19 +32,22 @@ def binary_sampler(Yn):
     burn_iter = 1000
     i = 0
 
+    F1_mcmc = np.empty((n, m + 1, max_iter))
     F_mcmc = np.empty((n, m + 1, max_iter))
     Theta_mcmc = np.empty((m + 1, max_iter))
 
     while (i < max_iter):
 
-        Sn, F = cond.S_sampling(Yn, Theta, P)
+        Sn, F, F1 = cond.S_sampling(Yn, Theta, P)
         Theta = cond.Theta_sampling(Yn, Sn)
         P = cond.P_sampling(Sn, a, b)
 
+        F1_mcmc[:, :, i] = F1
         F_mcmc[:, :, i] = F
         Theta_mcmc[:, i] = Theta
         i += 1
-    return Sn, F_mcmc, Theta_mcmc, P 
+
+    return Sn, F1_mcmc, F_mcmc, Theta_mcmc, P 
 
 if __name__ == "__main__":
     binary_sampler()

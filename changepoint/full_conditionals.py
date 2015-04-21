@@ -91,7 +91,7 @@ def S_conditional_lag1(Yn, Theta, P):
 
     return F
 
-def S_conditional_lag0(Yn, Theta, P):
+def S_conditional(Yn, Theta, P):
     '''
     Create a grid of pmf for Prob(s_t = k | Yt, Theta, P)
 
@@ -106,17 +106,22 @@ def S_conditional_lag0(Yn, Theta, P):
     n = len(Yn)
     m = len(Theta) - 1
 
-    F = np.zeros((n, m + 1))
-    F[0, 0] = 1
+    F1 = np.zeros((n, m + 1)) # lag 1 posterior p(s_t = k | Y_{t-1}, Theta, P)
+    F0 = np.zeros((n, m + 1)) # lag 0 posterior p(s_t = k | Y_{t}, Theta, P)
+    F1[0, 0] = 1
+    F0[0, 0] = 1
 
     fy = lambda t, k: st.bernoulli.pmf(Yn[t-1], Theta[k-1])
 
     for t in range(2, n + 1): # Forward
         d_t = np.array([fy(t, k_) for k_ in range(1, m + 2)])
-        F[t - 1] = ( F[t - 2].dot(P) ) * d_t
+        F1[t - 1] = ( F[t - 2].dot(P) )
+        F0[t - 1] = F1[t - 1] * d_t
 
-    F = F / F.sum(axis=1)[:, np.newaxis]
-    return F
+    # Normalize
+    F1 = F1 / F1.sum(axis=1)[:, np.newaxis]
+    F0 = F0 / F0.sum(axis=1)[:, np.newaxis]
+    return F1, F0
 
 def S_sampling(Yn, Theta, P):
     '''
@@ -125,7 +130,7 @@ def S_sampling(Yn, Theta, P):
     n = len(Yn)
     m = len(Theta) - 1
 
-    F0 = S_conditional_lag0(Yn, Theta, P)
+    F1, F0 = S_conditional(Yn, Theta, P)
     
     F = np.zeros((n, m + 1))
     F[-1, -1] = 1
@@ -138,4 +143,4 @@ def S_sampling(Yn, Theta, P):
         F[t - 1] = pmfs
         S[t - 1] = np.random.choice(np.arange(1, m + 2), p=pmfs)
 
-    return S, F
+    return S, F, F1
