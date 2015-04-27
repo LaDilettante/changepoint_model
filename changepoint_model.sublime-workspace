@@ -43,25 +43,25 @@
 			"file": "changepoint/full_conditionals.py",
 			"settings":
 			{
-				"buffer_size": 3535,
+				"buffer_size": 3778,
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/anh/projects/prospectus/data/BiB-FULL-DATA.TXT",
+			"settings":
+			{
+				"buffer_size": 377568,
+				"line_ending": "Windows"
 			}
 		},
 		{
 			"file": "changepoint/sampler.py",
 			"settings":
 			{
-				"buffer_size": 1002,
+				"buffer_size": 1091,
 				"line_ending": "Unix",
 				"name": "import"
-			}
-		},
-		{
-			"file": "tests/test_p_sampling.py",
-			"settings":
-			{
-				"buffer_size": 872,
-				"line_ending": "Unix"
 			}
 		}
 	],
@@ -101,6 +101,7 @@
 	},
 	"file_history":
 	[
+		"/home/anh/projects/changepoint_model/tests/test_p_sampling.py",
 		"/home/anh/projects/changepoint_model/tests/test_theta_sampling.py",
 		"/home/anh/projects/changepoint_model/tests/test_p_sampling",
 		"/home/anh/projects/changepoint_model/tests/test_full_conditionals.py",
@@ -284,15 +285,15 @@
 					"file": "changepoint/full_conditionals.py",
 					"settings":
 					{
-						"buffer_size": 3535,
+						"buffer_size": 3778,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2240,
-								2240
+								3105,
+								3105
 							]
 						],
 						"settings":
@@ -302,25 +303,51 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 82.0,
+						"translation.y": 1913.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "changepoint/sampler.py",
+					"file": "/home/anh/projects/prospectus/data/BiB-FULL-DATA.TXT",
 					"settings":
 					{
-						"buffer_size": 1002,
+						"buffer_size": 377568,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								950,
-								950
+								1352,
+								1352
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "changepoint/sampler.py",
+					"settings":
+					{
+						"buffer_size": 1091,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1041,
+								1041
 							]
 						],
 						"settings":
@@ -332,34 +359,6 @@
 						},
 						"translation.x": 0.0,
 						"translation.y": 295.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "tests/test_p_sampling.py",
-					"settings":
-					{
-						"buffer_size": 872,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								814,
-								814
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

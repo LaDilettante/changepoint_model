@@ -38,8 +38,8 @@ def binary_sampler(Yn):
 
     while (i < max_iter):
 
-        Sn, F, F1 = cond.S_sampling(Yn, Theta, P)
-        Theta = cond.Theta_sampling(Yn, Sn)
+        Sn, F, F1 = cond.S_sampling(Yn, Theta, P, model="binary")
+        Theta = cond.Theta_sampling(Yn, Sn, model="binary")
         P = cond.P_sampling(Sn, a, b)
 
         F1_mcmc[:, :, i] = F1
@@ -49,5 +49,43 @@ def binary_sampler(Yn):
 
     return Sn, F1_mcmc, F_mcmc, Theta_mcmc, P 
 
-if __name__ == "__main__":
-    binary_sampler()
+def poisson_sampler(Yn, max_iter=6000, burn_iter=1000):
+    # Initialize
+    n = 112
+    m = 1
+
+    Sn = init.S(n, m)
+    P = init.P(m + 1)
+    P[0, 0] = 0.9 # Paper's initialization
+    Theta = np.array([2, 2]) # Paper's initialization
+    delta = 1
+
+
+    # Prior # according to paper
+    a = 8
+    b = 0.1
+
+    tol = 1e-6
+    max_iter = max_iter
+    burn_iter = burn_iter
+    i = 0
+
+    F1_mcmc = np.empty((n, m + 1, max_iter))
+    F_mcmc = np.empty((n, m + 1, max_iter))
+    Theta_mcmc = np.empty((m + 1, max_iter))
+
+    while (i < max_iter):
+
+        Sn, F, F1 = cond.S_sampling(Yn, Theta, P, model="poisson")
+        Theta = cond.Theta_sampling(Yn, Sn, model="poisson")
+        P = cond.P_sampling(Sn, a, b)
+
+        F1_mcmc[:, :, i] = F1
+        F_mcmc[:, :, i] = F
+        Theta_mcmc[:, i] = Theta
+        i += 1
+
+    return Sn, F1_mcmc, F_mcmc, Theta_mcmc, P    
+
+# if __name__ == "__main__":
+#     binary_sampler()

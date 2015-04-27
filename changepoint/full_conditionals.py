@@ -2,7 +2,7 @@ import numpy as np
 import scipy as sp
 import scipy.stats as st
 
-def Theta_conditional(k, Yn, Sn):
+def Theta_conditional(k, Yn, Sn, model):
     '''
     The full conditional of theta, given Yn, Sn, and P.
 
@@ -18,9 +18,12 @@ def Theta_conditional(k, Yn, Sn):
     Nk = np.sum(Sn == k)
     Uk = np.sum(Yn[Sn == k])
 
-    return st.beta(2 + Uk, 2 + Nk - Uk)
+    if model == "binary":
+        return st.beta(2 + Uk, 2 + Nk - Uk)
+    elif model == "poisson":
+        return st.gamma(2 + Uk, scale=1.0 / (1 + Nk))
 
-def Theta_sampling(Yn, Sn):
+def Theta_sampling(Yn, Sn, model):
     '''
     Sample Theta from its full conditional distribution
 
@@ -33,8 +36,9 @@ def Theta_sampling(Yn, Sn):
     '''
     number_of_regimes = len(np.unique(Sn))
     thetas = np.empty(number_of_regimes)
+    
     for k in range(1, number_of_regimes + 1):
-        thetas[k - 1] = Theta_conditional(k, Yn, Sn).rvs()
+        thetas[k - 1] = Theta_conditional(k, Yn, Sn, model=model).rvs()
     return thetas        
 
 def P_conditional(i, Sn, a, b):
@@ -91,7 +95,7 @@ def S_conditional_lag1(Yn, Theta, P):
 
     return F
 
-def S_conditional(Yn, Theta, P):
+def S_conditional(Yn, Theta, P, model):
     '''
     Create a grid of pmf for Prob(s_t = k | Yt, Theta, P)
 
@@ -111,11 +115,14 @@ def S_conditional(Yn, Theta, P):
     F1[0, 0] = 1
     F0[0, 0] = 1
 
-    fy = lambda t, k: st.bernoulli.pmf(Yn[t-1], Theta[k-1])
+    if model == "binary":
+        fy = lambda t, k: st.bernoulli.pmf(Yn[t-1], Theta[k-1])
+    elif model == "poisson":
+        fy = lambda t, k: (Theta[k-1] ** Yn[t-1]) * np.exp(-Theta[k-1]) / np.math.factorial(Yn[t-1]) 
 
     for t in range(2, n + 1): # Forward
         d_t = np.array([fy(t, k_) for k_ in range(1, m + 2)])
-        F1[t - 1] = ( F[t - 2].dot(P) )
+        F1[t - 1] = ( F0[t - 2].dot(P) )
         F0[t - 1] = F1[t - 1] * d_t
 
     # Normalize
@@ -123,14 +130,14 @@ def S_conditional(Yn, Theta, P):
     F0 = F0 / F0.sum(axis=1)[:, np.newaxis]
     return F1, F0
 
-def S_sampling(Yn, Theta, P):
+def S_sampling(Yn, Theta, P, model):
     '''
     Sample S from the n x (m + 1) grid of pmfs
     '''
     n = len(Yn)
     m = len(Theta) - 1
 
-    F1, F0 = S_conditional(Yn, Theta, P)
+    F1, F0 = S_conditional(Yn, Theta, P, model=model)
     
     F = np.zeros((n, m + 1))
     F[-1, -1] = 1
