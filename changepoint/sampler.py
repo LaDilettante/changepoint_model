@@ -1,5 +1,6 @@
 import init_functions as init
 import full_conditionals as cond
+import full_conditionals_opt as cond_opt
 import numpy as np
 import scipy.stats as st
 
@@ -12,30 +13,20 @@ def binary_true_data():
 
     return Yn
 
-def binary_sampler(Yn, max_iter=6000, burn_iter=1000):
+def binary_sampler(Yn, max_iter=6000, burn_iter=1000, cond=cond):
     # Initialize
-    n = 150
-    m = 2
-
+    n = 150 ; m = 2
     Sn = init.S(n, m)
     P = init.P(m + 1)
     Theta = np.array([0.5, 0.5, 0.5])
-    delta = 1
-
-
     # Prior
-    a = 8
-    b = 0.1
-
-    tol = 1e-6
-    max_iter = max_iter
-    burn_iter = burn_iter
-    i = 0
+    a = 8 ; b = 0.1
 
     F1_mcmc = np.empty((n, m + 1, max_iter))
     F_mcmc = np.empty((n, m + 1, max_iter))
     Theta_mcmc = np.empty((m + 1, max_iter))
 
+    i = 0
     while (i < max_iter):
 
         Sn, F, F1 = cond.S_sampling(Yn, Theta, P, model="binary")
@@ -47,7 +38,7 @@ def binary_sampler(Yn, max_iter=6000, burn_iter=1000):
         Theta_mcmc[:, i] = Theta
         i += 1
 
-    return Sn, F1_mcmc, F_mcmc, Theta_mcmc, P 
+    return Sn, F1_mcmc, F_mcmc, Theta_mcmc, P
 
 def poisson_sampler(Yn, max_iter=6000, burn_iter=1000):
     # Initialize
