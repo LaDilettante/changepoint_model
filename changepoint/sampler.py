@@ -13,7 +13,7 @@ def binary_true_data():
 
     return Yn
 
-def binary_sampler(Yn, max_iter=6000, burn_iter=1000, cond=cond):
+def binary_sampler(Yn, cond, max_iter=6000, burn_iter=1000):
     # Initialize
     n = 150 ; m = 2
     Sn = init.S(n, m)
@@ -40,31 +40,23 @@ def binary_sampler(Yn, max_iter=6000, burn_iter=1000, cond=cond):
 
     return Sn, F1_mcmc, F_mcmc, Theta_mcmc, P
 
-def poisson_sampler(Yn, max_iter=6000, burn_iter=1000):
+def poisson_sampler(Yn, cond, max_iter=6000, burn_iter=1000):
     # Initialize
-    n = 112
-    m = 1
+    n = 112 ; m = 1
 
     Sn = init.S(n, m)
     P = init.P(m + 1)
     P[0, 0] = 0.9 # Paper's initialization
     Theta = np.array([2, 2]) # Paper's initialization
-    delta = 1
-
 
     # Prior # according to paper
-    a = 8
-    b = 0.1
-
-    tol = 1e-6
-    max_iter = max_iter
-    burn_iter = burn_iter
-    i = 0
+    a = 8 ; b = 0.1
 
     F1_mcmc = np.empty((n, m + 1, max_iter))
     F_mcmc = np.empty((n, m + 1, max_iter))
     Theta_mcmc = np.empty((m + 1, max_iter))
 
+    i = 0
     while (i < max_iter):
 
         Sn, F, F1 = cond.S_sampling(Yn, Theta, P, model="poisson")

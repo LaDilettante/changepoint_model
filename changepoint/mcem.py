@@ -32,6 +32,8 @@ def theta_mstep(k, Yn, Sns, model):
 
     if model == "binary":
         return 1.0 * Uks.sum() / Nks.sum()
+    if model == "poisson":
+        return 1.0 * Uks.sum() / Nks.sum()
 
 def Theta_mstep(Yn, Sns, model):
     '''
