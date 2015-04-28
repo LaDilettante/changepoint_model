@@ -1,5 +1,4 @@
 import init_functions as init
-import full_conditionals as cond
 import mcem as mcem
 import numpy as np
 import scipy.stats as st
@@ -23,8 +22,8 @@ def mcem_binary_sampler(Yn):
     
     # 100 MCEM steps
     Ns = np.linspace(1, 300, 10).astype(np.int64) # increasing N
-    Thetas = np.zeros((3, 100))
-    Ps = np.zeros((3, 3, 100))
+    Thetas = np.zeros((m + 1, 100))
+    Ps = np.zeros((m + 1, m + 1, 100))
 
     for i in range(100):
         N = Ns[i / 10]

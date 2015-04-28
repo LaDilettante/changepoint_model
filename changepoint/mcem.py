@@ -1,4 +1,3 @@
-import init_functions as init
 import full_conditionals as cond
 import numpy as np
 import scipy.stats as st
@@ -57,9 +56,9 @@ def p_mstep(i, Sns):
     N = Sns.shape[1] # Number of Sn samples
 
     n_iis = np.zeros(N)
-    for j in range(N):
-        n_ii = np.sum(Sns[:, j] == i) - 1
-        n_iis[j] = n_ii
+    for N_ in range(N):
+        n_ii = np.sum(Sns[:, N_] == i) - 1
+        n_iis[N_] = n_ii
 
     return 1.0 * n_iis.sum() / (n_iis.sum() + N)
 

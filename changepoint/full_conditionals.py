@@ -4,7 +4,7 @@ import scipy.stats as st
 
 def Theta_conditional(k, Yn, Sn, model):
     '''
-    The full conditional of theta, given Yn, Sn, and P.
+    The full conditional of theta, given Yn, Sn.
 
     Args
         k: indicates which regime's parameter we're sampling
@@ -95,6 +95,15 @@ def S_conditional_lag1(Yn, Theta, P):
 
     return F
 
+def fy(t, k, Yn, Theta, model):
+    '''
+    f(y_t | Y_{t - 1})
+    '''
+    if model == "binary":
+        return st.bernoulli.pmf(Yn[t-1], Theta[k-1])
+    elif model == "poisson":
+        return (Theta[k-1] ** Yn[t-1]) * np.exp(-Theta[k-1]) / np.math.factorial(Yn[t-1])
+
 def S_conditional(Yn, Theta, P, model):
     '''
     Create a grid of pmf for Prob(s_t = k | Yt, Theta, P)
@@ -113,15 +122,10 @@ def S_conditional(Yn, Theta, P, model):
     F1 = np.zeros((n, m + 1)) # lag 1 posterior p(s_t = k | Y_{t-1}, Theta, P)
     F0 = np.zeros((n, m + 1)) # lag 0 posterior p(s_t = k | Y_{t}, Theta, P)
     F1[0, 0] = 1
-    F0[0, 0] = 1
-
-    if model == "binary":
-        fy = lambda t, k: st.bernoulli.pmf(Yn[t-1], Theta[k-1])
-    elif model == "poisson":
-        fy = lambda t, k: (Theta[k-1] ** Yn[t-1]) * np.exp(-Theta[k-1]) / np.math.factorial(Yn[t-1]) 
+    F0[0, 0] = 1  
 
     for t in range(2, n + 1): # Forward
-        d_t = np.array([fy(t, k_) for k_ in range(1, m + 2)])
+        d_t = np.array([fy(t, k_, Yn, Theta, model) for k_ in range(1, m + 2)])
         F1[t - 1] = ( F0[t - 2].dot(P) )
         F0[t - 1] = F1[t - 1] * d_t
 

@@ -12,7 +12,7 @@ def binary_true_data():
 
     return Yn
 
-def binary_sampler(Yn):
+def binary_sampler(Yn, max_iter=6000, burn_iter=1000):
     # Initialize
     n = 150
     m = 2
@@ -28,8 +28,8 @@ def binary_sampler(Yn):
     b = 0.1
 
     tol = 1e-6
-    max_iter = 6000
-    burn_iter = 1000
+    max_iter = max_iter
+    burn_iter = burn_iter
     i = 0
 
     F1_mcmc = np.empty((n, m + 1, max_iter))
