@@ -90,18 +90,6 @@ def P_sampling(Sn, a, b):
 
     return P
 
-def S_conditional_lag1(Yn, Theta, P):
-    n = len(Yn)
-    m = len(Theta) - 1
-
-    F = np.zeros((n, m + 1))
-    F[0, 0] = 1
-
-    for t in range(2, n + 1):
-        F[t - 1] = ( F[t - 2].dot(P) )
-
-    return F
-
 def fy(t, k, Yn, Theta, model):
     '''
     f(y_t | Y_{t - 1})
