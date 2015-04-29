@@ -1,14 +1,22 @@
 import init_functions as init
 import mcem as mcem
+import mcem_opt as mcem_opt
 import numpy as np
 import scipy.stats as st
 
-def mcem_sampler(Yn, model, m, tol=1e-6):
+def mcem_sampler(Yn, model, m, mcem, tol=1e-6):
     '''
     Calculate the MLE of Theta and P, using Monte Carlo EM.
     
     We use EM because the latent state vector is not observable.
     We use Monte Carlo method because the Q function in the E-step is not available analytically.
+
+    Args
+        Yn: array, time series data
+        model: string, e.g. "binary", "poisson"
+        m: int, number of change points
+        mcem: module, e.g. mcem, mcem_opt
+            Use the regular of optimized version
     '''
     # Initialize
     n = len(Yn) ; m = m

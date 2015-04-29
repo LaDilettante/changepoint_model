@@ -1,34 +1,16 @@
-import full_conditionals as cond
+import full_conditionals_opt as cond_opt
+import mcem as mcem
 import numpy as np
 import scipy.stats as st
 
-def S_estep(N, Yn, Theta, P, model, cond=cond):
-    Sn, F, F1 = cond.S_sampling(Yn, Theta, P, model)
-    Sns = np.zeros((Sn.shape[0], N))
-
-    for N_ in range(N):
-        Sn, F, F1 = cond.S_sampling(Yn, Theta, P, model)
-        Sns[:, N_] = Sn
-
-    return Sns
-
-def Nk(k, Sn):
-    return np.sum(Sn == k)
-def Uk(k, Yn, Sn):
-    return np.sum(Yn[Sn == k])
+S_estep = mcem.S_estep
 
 def theta_mstep(k, Yn, Sns, model):
     '''
     Calculate theta_k, using N samples of Sn
     '''
-    N = Sns.shape[1]
-
-    Uks = np.zeros(N)
-    Nks = np.zeros(N)
-
-    for N_ in range(N):
-        Uks[N_] = Uk(k, Yn, Sns[:, N_])
-        Nks[N_] = Nk(k, Sns[:, N_])
+    Uks = np.sum(Yn[:, np.newaxis] * (Sns == k), axis=0)
+    Nks = np.sum(Sns == k, axis=0)
 
     if model == "binary":
         return 1.0 * Uks.sum() / Nks.sum()
@@ -58,14 +40,9 @@ def p_mstep(i, Sns):
     '''
     Calculate p_ii = \frac{\sum_j n_ii,j}{\sum_j (n_ii,j + 1)} from Eq 13
     '''
-    N = Sns.shape[1] # Number of Sn samples
+    n_iis = np.sum(Sns == i, axis=0) - 1
 
-    n_iis = np.zeros(N)
-    for N_ in range(N):
-        n_ii = np.sum(Sns[:, N_] == i) - 1
-        n_iis[N_] = n_ii
-
-    return 1.0 * n_iis.sum() / (n_iis.sum() + N)
+    return 1.0 * n_iis.sum() / (n_iis.sum() + len(n_iis))
 
 def P_mstep(Sns):
     '''

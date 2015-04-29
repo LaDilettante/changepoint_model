@@ -14,7 +14,7 @@ def sampler(Yn, model, m, cond, max_iter=6000, burn_iter=1000):
         Yn: array, time-series data
         model: string, e.g. "binary", "poisson"
         m: int, number of change points
-        cond: string, e.g. "cond", "cond_opt"
+        cond: module, e.g. cond, cond_opt
             Whether to use the regular or optimized version
         max_iter: int, number of iterations
         burn_iter: int, number of burn-in iterations
