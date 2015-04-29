@@ -15,13 +15,20 @@ def Theta_conditional(k, Yn, Sn, model):
         the distribution that is the full conditional of theta.
         We can sample from this distribution using `.rvs()`
     '''
+    m = len(np.unique(Sn)) - 1 # number of breaks
+
     Nk = np.sum(Sn == k)
     Uk = np.sum(Yn[Sn == k])
 
     if model == "binary":
         return st.beta(2 + Uk, 2 + Nk - Uk)
     elif model == "poisson":
-        return st.gamma(2 + Uk, scale=(1.0 / (1 + Nk)))
+        # Different priors based on number of breaks
+        if m == 1:
+            a = 2 ; b = 1
+        elif m == 2:
+            a = 3 ; b = 1
+        return st.gamma(a + Uk, scale=(1.0 / (b + Nk)))
 
 def Theta_sampling(Yn, Sn, model):
     '''

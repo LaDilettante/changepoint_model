@@ -37,36 +37,43 @@ def mcem_binary_sampler(Yn):
 
     return Thetas, Ps
 
-def mcem_poisson_sampler(Yn, tol=1e-4):
+def mcem_poisson_sampler(Yn, m, tol=1e-4):
     # Initialize
-    n = 112 ; m = 1
-
+    n = len(Yn) ; m = m
     Sn = init.S(n, m)
     P = init.P(m + 1)
-    P[0, 0] = 0.9 # Paper's initialization
-    Theta = np.array([2, 2]) # Paper's initialization
 
-    # 100 MCEM steps
-    Ns = np.linspace(1, 300, 10).astype(np.int64) # increasing N
+    # Initialized value according to paper
+    P[0, 0] = 0.9
+    Theta = np.repeat(2, m + 1)
+
+    # N is the number of Sn sample
+    # According to paper, start N = 1 and increases over the MCEM iterations
+    Ns = np.linspace(1, 300, 10).astype(np.int64)
+    
+    # Pre-populate result array
     Thetas = np.zeros((m + 1, 100))
 
+    # Start 100 MCEM steps
     i = 0
     while i < 100:
-    #for i in range(100):
         N = Ns[i / 10]
+
         # E-step
         Sns = mcem.S_estep(N, Yn, Theta, P, model="poisson")
+
         # M-step
         Theta_old = Theta
         Theta = mcem.Theta_mstep(Yn, Sns, model="poisson")
         P = mcem.P_mstep(Sns)
-        # Store values to see if they converge
+
+        # Store Thetas across iterations
         Thetas[:, i] = Theta
         
         # Check convergence
-        if np.allclose(Theta, Theta_old, atol=tol):
-            break
+        #if np.allclose(Theta, Theta_old, atol=tol):
+        #    break
 
-        i += 1# Increment
+        i += 1
 
     return Thetas, Theta, P

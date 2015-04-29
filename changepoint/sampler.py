@@ -73,20 +73,27 @@ def poisson_sampler(Yn, cond, max_iter=6000, burn_iter=1000):
     return Sn, F1_mcmc, F_mcmc, Theta_mcmc, P
 
 def poisson_sampler_with_mcem(Yn, m, cond, max_iter=6000, burn_iter=1000):
-    Thetas, Theta, P = mcem.mcem_poisson_sampler(Yn, tol=1e-4)
+    
+    # MCEM to get the MLE estimate
+    Thetas, Theta, P = mcem.mcem_poisson_sampler(Yn, m=m)
     Theta_mle = Theta ; P_mle = P
+    # print Theta_mle, P_mle
 
     # Initialize
-    n = 112 ; m = m
-
+    n = len(Yn) ; m = m
     Sn = init.S(n, m)
     P = init.P(m + 1)
-    P[0, 0] = 0.9 # Paper's initialization
-    Theta = np.array([2, 2]) # Paper's initialization
 
-    # Prior # according to paper
-    a = 8 ; b = 0.1
+    # Paper's prior and intialization
+    P[0, 0] = 0.9
+    Theta = np.repeat(2, m + 1)
+    # Prior on p_ii
+    if m == 1:
+        a = 8 ; b = 0.1
+    elif m == 2:
+        a = 5 ; b = 0.1
 
+    # Pre-populate result arrays
     F1_mcmc = np.empty((n, m + 1, max_iter))
     F_mcmc = np.empty((n, m + 1, max_iter))
     Theta_mcmc = np.empty((m + 1, max_iter))
@@ -95,8 +102,11 @@ def poisson_sampler_with_mcem(Yn, m, cond, max_iter=6000, burn_iter=1000):
     Sn_extra_mcmc = np.empty((n, max_iter))
     pii_extra_mcmc = np.empty((m + 1, max_iter))
 
+    # Start MCMC
     i = 0
     while (i < max_iter):
+        # print "Iteration" + str(i)
+        # print P, Theta
 
         Sn, F, F1 = cond.S_sampling(Yn, Theta, P, model="poisson")
         Theta = cond.Theta_sampling(Yn, Sn, model="poisson")
