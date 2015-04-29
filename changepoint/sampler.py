@@ -73,8 +73,8 @@ def poisson_sampler(Yn, cond, max_iter=6000, burn_iter=1000):
     return Sn, F1_mcmc, F_mcmc, Theta_mcmc, P
 
 def poisson_sampler_with_mcem(Yn, cond, max_iter=6000, burn_iter=1000):
-    Thetas, Ps = mcem.mcem_poisson_sampler(Yn)
-    Theta_mle = Thetas[-1] ; P_mle = Ps[-1]
+    Thetas, Theta, P = mcem.mcem_poisson_sampler(Yn, tol=1e-4)
+    Theta_mle = Theta ; P_mle = P
 
     # Initialize
     n = 112 ; m = 1
