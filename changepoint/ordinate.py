@@ -48,10 +48,23 @@ def log_prior_P(P, a, b):
 
     return np.apply_along_axis(log_pdf, axis=0, arr=p_iis).sum()
 
-def log_posterior_Theta(Yn, Theta, model):
-    pass
+def log_posterior_Theta_single(Theta, Yn, Sn, model):
+    '''
+    Calculate ln pi(Theta* | Yn, Sn) = \sum ln pi(theta_k* | Yn, Sn)
+    '''
+    k = np.arange(1, len(Theta) + 1)
+    f = lambda k: cond.Theta_conditional(k, Yn, Sn, model).logpdf(Theta[k - 1])
+    
+    return np.apply_along_axis(f, axis=0, arr=k).sum()
 
-def log_posterior_P(Theta, P, a, b):
+def log_posterior_Theta(Theta, Yn, Sns, model):
+    '''
+    Calculate ln pi(Theta* | Yn) = ln \mean pi(Theta* | Yn, Sn)
+    '''
+    f = lambda Sn: log_posterior_Theta_single(Theta, Yn, Sn, model)
+    return np.log(np.exp(np.apply_along_axis(f, axis=0, arr=Sns)).mean())
+
+def log_posterior_P(P, Theta, a, b):
     pass
 
 def log_marginal_likelihood(Yn, Theta, P, a, b, model):

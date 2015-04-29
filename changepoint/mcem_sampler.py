@@ -51,15 +51,22 @@ def mcem_poisson_sampler(Yn):
     Thetas = np.zeros((m + 1, 100))
     Ps = np.zeros((m + 1, m + 1, 100))
 
+    # i = 0
     for i in range(100):
         N = Ns[i / 10]
         # E-step
         Sns = mcem.S_estep(N, Yn, Theta, P, model="poisson")
         # M-step
+        # Theta_old = Theta
         Theta = mcem.Theta_mstep(Yn, Sns, model="poisson")
         P = mcem.P_mstep(Sns)
         # Store values to see if they converge
         Thetas[:, i] = Theta
         Ps[:, :, i] = P
+        # Check convergence
+        #if np.allclose(Theta, Theta_old, atol=tol):
+        #    break
 
-    return Thetas, Ps    
+        # i += 1# Increment
+
+    return Thetas, Ps
