@@ -6,23 +6,35 @@ import ordinate as ordinate
 import numpy as np
 import scipy.stats as st
 
-def binary_true_data():
-    thetas = np.array([0.5, 0.75, 0.25])
-    ns = np.array([50, 50, 50])
+def sampler(Yn, model, m, cond, max_iter=6000, burn_iter=1000):
+    '''
+    Detect the location of change points
 
-    Yn = np.array([st.bernoulli.rvs(theta_, size=n_) for theta_, n_ in zip(thetas, ns)]) \
-        .ravel()
-
-    return Yn
-
-def binary_sampler(Yn, cond, max_iter=6000, burn_iter=1000):
-    # Initialize
-    n = 150 ; m = 2
+    Args
+        Yn: array, time-series data
+        model: string, e.g. "binary", "poisson"
+        m: int, number of change points
+        cond: string, e.g. "cond", "cond_opt"
+            Whether to use the regular or optimized version of sub-functions
+        max_iter: int, number of iterations
+        burn_iter: int, number of burn-in iterations
+    '''
+    # Initialize Sn and P
+    n = len(Yn) ; m = m
     Sn = init.S(n, m)
     P = init.P(m + 1)
-    Theta = np.array([0.5, 0.5, 0.5])
-    # Prior
-    a = 8 ; b = 0.1
+
+    # Initializing Theta
+    if model == "binary":
+        Theta = np.repeat(0.5, m + 1)
+    elif model == "poisson":
+        Theta = np.repeat(2, m + 1) # From paper
+    
+    # Prior on P
+    if m == 1:
+        a = 8 ; b = 0.1
+    elif m == 2:
+        a = 5 ; b = 0.1
 
     F1_mcmc = np.empty((n, m + 1, max_iter))
     F_mcmc = np.empty((n, m + 1, max_iter))
@@ -31,8 +43,8 @@ def binary_sampler(Yn, cond, max_iter=6000, burn_iter=1000):
     i = 0
     while (i < max_iter):
 
-        Sn, F, F1 = cond.S_sampling(Yn, Theta, P, model="binary")
-        Theta = cond.Theta_sampling(Yn, Sn, model="binary")
+        Sn, F, F1 = cond.S_sampling(Yn, Theta, P, model=model)
+        Theta = cond.Theta_sampling(Yn, Sn, model=model)
         P = cond.P_sampling(Sn, a, b)
 
         F1_mcmc[:, :, i] = F1
@@ -42,40 +54,28 @@ def binary_sampler(Yn, cond, max_iter=6000, burn_iter=1000):
 
     return Sn, F1_mcmc, F_mcmc, Theta_mcmc, P
 
-def poisson_sampler(Yn, cond, max_iter=6000, burn_iter=1000):
-    # Initialize
-    n = 112 ; m = 1
+def sampler_with_mcem(Yn, model, m, cond, max_iter=6000, burn_iter=1000):
+    '''
+    Detect the location of change points and calculate marginal likelihood
+    
+    Using marginal likelihood, we can compare different models
+    with different number of change points
 
-    Sn = init.S(n, m)
-    P = init.P(m + 1)
-    P[0, 0] = 0.9 # Paper's initialization
-    Theta = np.array([2, 2]) # Paper's initialization
+    Args
+        Yn: array, time-series data
+        model: string, e.g. "binary", "poisson"
+        m: int, number of change points
+        cond: string, e.g. "cond", "cond_opt"
+            Whether to use the regular or optimized version of sub-functions
+        max_iter: int, number of iterations
+        burn_iter: int, number of burn-in iterations
 
-    # Prior # according to paper
-    a = 8 ; b = 0.1
-
-    F1_mcmc = np.empty((n, m + 1, max_iter))
-    F_mcmc = np.empty((n, m + 1, max_iter))
-    Theta_mcmc = np.empty((m + 1, max_iter))
-
-    i = 0
-    while (i < max_iter):
-
-        Sn, F, F1 = cond.S_sampling(Yn, Theta, P, model="poisson")
-        Theta = cond.Theta_sampling(Yn, Sn, model="poisson")
-        P = cond.P_sampling(Sn, a, b)
-
-        F1_mcmc[:, :, i] = F1
-        F_mcmc[:, :, i] = F
-        Theta_mcmc[:, i] = Theta
-        i += 1
-
-    return Sn, F1_mcmc, F_mcmc, Theta_mcmc, P
-
-def poisson_sampler_with_mcem(Yn, m, cond, max_iter=6000, burn_iter=1000):
+    Returns
+        marg_lik: marginal likelihood of the input model
+    '''
     
     # MCEM to get the MLE estimate
-    Thetas, Theta, P = mcem.mcem_poisson_sampler(Yn, m=m)
+    Thetas, Theta, P = mcem.mcem_sampler(Yn, model, m)
     Theta_mle = Theta ; P_mle = P
     # print Theta_mle, P_mle
 
@@ -84,10 +84,13 @@ def poisson_sampler_with_mcem(Yn, m, cond, max_iter=6000, burn_iter=1000):
     Sn = init.S(n, m)
     P = init.P(m + 1)
 
-    # Paper's prior and intialization
-    P[0, 0] = 0.9
-    Theta = np.repeat(2, m + 1)
-    # Prior on p_ii
+    # Initializing Theta
+    if model == "binary":
+        Theta = np.repeat(0.5, m + 1)
+    elif model == "poisson":
+        Theta = np.repeat(2, m + 1) # From paper
+    
+    # Prior on P
     if m == 1:
         a = 8 ; b = 0.1
     elif m == 2:
@@ -98,7 +101,7 @@ def poisson_sampler_with_mcem(Yn, m, cond, max_iter=6000, burn_iter=1000):
     F_mcmc = np.empty((n, m + 1, max_iter))
     Theta_mcmc = np.empty((m + 1, max_iter))
     Sn_mcmc = np.empty((n, max_iter))
-
+    # Extra result arrays for marginal likelihood calculation
     Sn_extra_mcmc = np.empty((n, max_iter))
     pii_extra_mcmc = np.empty((m + 1, max_iter))
 
@@ -108,12 +111,12 @@ def poisson_sampler_with_mcem(Yn, m, cond, max_iter=6000, burn_iter=1000):
         # print "Iteration" + str(i)
         # print P, Theta
 
-        Sn, F, F1 = cond.S_sampling(Yn, Theta, P, model="poisson")
-        Theta = cond.Theta_sampling(Yn, Sn, model="poisson")
+        Sn, F, F1 = cond.S_sampling(Yn, Theta, P, model=model)
+        Theta = cond.Theta_sampling(Yn, Sn, model=model)
         P = cond.P_sampling(Sn, a, b)
 
         # Additional sampling of Sn for marginal likelihood
-        Sn_extra, F, F1 = cond.S_sampling(Yn, Theta_mle, P, model="poisson")
+        Sn_extra, F, F1 = cond.S_sampling(Yn, Theta_mle, P, model=model)
         P_extra = cond.P_sampling(Sn_extra, a, b)
 
         F1_mcmc[:, :, i] = F1
@@ -124,14 +127,14 @@ def poisson_sampler_with_mcem(Yn, m, cond, max_iter=6000, burn_iter=1000):
         pii_extra_mcmc[:, i] = np.diag(P_extra)
         i += 1
 
-    log_likelihood = ordinate.log_likelihood(Yn, Theta_mle, P_mle, model="poisson")
-    log_prior_Theta = ordinate.log_prior_Theta(Theta_mle, model="poisson")
+    # Calculate marginal likelihood
+    log_likelihood = ordinate.log_likelihood(Yn, Theta_mle, P_mle, model=model)
+    log_prior_Theta = ordinate.log_prior_Theta(Theta_mle, model=model)
     log_prior_P = ordinate.log_prior_P(P_mle, a, b)
-    log_posterior_Theta = ordinate.log_posterior_Theta(Theta_mle, Yn, Sn_mcmc, model="poisson")
+    log_posterior_Theta = ordinate.log_posterior_Theta(Theta_mle, Yn, Sn_mcmc, model=model)
     log_posterior_P = ordinate.log_posterior_P(P_mle, Sn_extra_mcmc, a, b)
 
     print log_likelihood, log_prior_Theta, log_prior_P, log_posterior_Theta, log_posterior_P
-
     marg_lik = log_likelihood + log_prior_Theta + log_prior_P - log_posterior_Theta - log_posterior_P
 
     return Sn, F1_mcmc, F_mcmc, Theta_mcmc, Theta_mle, P_mle, marg_lik
