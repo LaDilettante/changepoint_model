@@ -1,8 +1,6 @@
-import full_conditionals as cond
 import numpy as np
 import scipy as sp
 import scipy.stats as st
-import numba
 
 def Theta_conditional(k, Yn, Sn, model):
     '''
@@ -23,7 +21,7 @@ def Theta_conditional(k, Yn, Sn, model):
     if model == "binary":
         return st.beta(2 + Uk, 2 + Nk - Uk)
     elif model == "poisson":
-        return st.gamma(2 + Uk, scale=1.0 / (1 + Nk))
+        return st.gamma(2 + Uk, scale=(1.0 / (1 + Nk)))
 
 def Theta_sampling(Yn, Sn, model):
     '''
@@ -40,8 +38,9 @@ def Theta_sampling(Yn, Sn, model):
     thetas = np.empty(number_of_regimes)
 
     k = np.arange(1, number_of_regimes + 1)
-    f = lambda k: Theta_conditional(k, Yn, Sn, model=model).rvs()
-    Theta = np.apply_along_axis(f, axis=0, arr=k)
+    f = lambda k: Theta_conditional(k, Yn, Sn, model).rvs() # Lambda function for a single k
+    f_array = np.frompyfunc(f, 1, 1) # Vectorize the function for an array of k's
+    Theta = f_array(k)
     
     return Theta        
 
@@ -79,7 +78,9 @@ def P_sampling(Sn, a, b):
 
     i = np.arange(1, number_of_regimes)
     f = lambda i: P_conditional(i, Sn, a, b).rvs()
-    p_iis = np.append(np.apply_along_axis(f, axis=0, arr=i), [1])
+    f_array = np.frompyfunc(f, 1, 1)
+
+    p_iis = np.append(f_array(i), [1])
     p_ijs = 1 - p_iis[:-1]
     P = np.diag(p_iis) + np.diag(p_ijs, k=1)
 
@@ -132,8 +133,8 @@ def S_conditional(Yn, Theta, P, model):
         F0[t - 1] = F1[t - 1] * d_t
 
     # Normalize
-    F1 = F1 / F1.sum(axis=1)[:, np.newaxis]
-    F0 = F0 / F0.sum(axis=1)[:, np.newaxis]
+    F1 = 1.0 * F1 / F1.sum(axis=1)[:, np.newaxis]
+    F0 = 1.0 * F0 / F0.sum(axis=1)[:, np.newaxis]
     return F1, F0
 
 def S_sampling(Yn, Theta, P, model):
@@ -152,8 +153,9 @@ def S_sampling(Yn, Theta, P, model):
 
     for t in range(n - 1, 0, -1): # Backward
         pmfs = F0[t - 1] * P[:, S[t] - 1].T
-        pmfs = pmfs / pmfs.sum()
+        pmfs = (1.0 * pmfs / pmfs.sum()).astype('float64') # Not sure why sometimes small number is converted to dtype('O')
         F[t - 1] = pmfs
+        # print "Backward" + str(t), pmfs
         S[t - 1] = np.random.choice(np.arange(1, m + 2), p=pmfs)
 
     return S, F, F1

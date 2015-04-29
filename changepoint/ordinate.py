@@ -64,8 +64,30 @@ def log_posterior_Theta(Theta, Yn, Sns, model):
     f = lambda Sn: log_posterior_Theta_single(Theta, Yn, Sn, model)
     return np.log(np.exp(np.apply_along_axis(f, axis=0, arr=Sns)).mean())
 
-def log_posterior_P(P, Theta, a, b):
-    pass
+def log_posterior_pii_single(i, P, Sn, a, b):
+    '''
+    Calculate ln pi(p_ii | Sn)
+    '''
+    p_ii = P[i - 1, i - 1]
+    n_ii = np.sum(Sn == i) - 1
+    return st.beta(a + n_ii, b + 1).logpdf(p_ii)
+
+def log_posterior_P_single(P, Sn, a, b):
+    '''
+    Calculate pi(P | Sn) = \prod pi(p_ii | Sn) = exp(\sum ln pi(p_ii | Sn))
+    '''
+    number_of_regimes = len(np.unique(Sn))
+    i = np.arange(1, number_of_regimes + 1)
+    f = lambda i: log_posterior_pii_single(i, P, Sn, a, b)
+    
+    return np.exp(np.apply_along_axis(f, axis=0, arr=i).sum())
+
+def log_posterior_P(P, Sns, a, b):
+    '''
+    Calculate ln p(P* | Yn, Theta*) = ln 1/G \sum_j pi(P | S_{n,j})
+    '''
+    f = lambda Sn: log_posterior_P_single(P, Sn, a, b)
+    return np.log(np.apply_along_axis(f, axis=0, arr=Sns).mean())
 
 def log_marginal_likelihood(Yn, Theta, P, a, b, model):
     '''

@@ -153,5 +153,6 @@ def S_sampling(Yn, Theta, P, model):
         pmfs = pmfs / pmfs.sum()
         F[t - 1] = pmfs
         S[t - 1] = np.random.choice(np.arange(1, m + 2), p=pmfs)
+        print S.shape, S[t-1]
 
     return S, F, F1
