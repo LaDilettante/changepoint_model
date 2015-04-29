@@ -60,7 +60,6 @@ def poisson_sampler(Yn, cond, max_iter=6000, burn_iter=1000):
 
     i = 0
     while (i < max_iter):
-        # print "Iteration" + str(i)
 
         Sn, F, F1 = cond.S_sampling(Yn, Theta, P, model="poisson")
         Theta = cond.Theta_sampling(Yn, Sn, model="poisson")
@@ -73,12 +72,12 @@ def poisson_sampler(Yn, cond, max_iter=6000, burn_iter=1000):
 
     return Sn, F1_mcmc, F_mcmc, Theta_mcmc, P
 
-def poisson_sampler_with_mcem(Yn, cond, max_iter=6000, burn_iter=1000):
+def poisson_sampler_with_mcem(Yn, m, cond, max_iter=6000, burn_iter=1000):
     Thetas, Theta, P = mcem.mcem_poisson_sampler(Yn, tol=1e-4)
     Theta_mle = Theta ; P_mle = P
 
     # Initialize
-    n = 112 ; m = 1
+    n = 112 ; m = m
 
     Sn = init.S(n, m)
     P = init.P(m + 1)
@@ -115,10 +114,14 @@ def poisson_sampler_with_mcem(Yn, cond, max_iter=6000, burn_iter=1000):
         pii_extra_mcmc[:, i] = np.diag(P_extra)
         i += 1
 
-    marg_lik = ordinate.log_likelihood(Yn, Theta_mle, P_mle, model="poisson") + \
-        ordinate.log_prior_Theta(Theta_mle, model="poisson") + \
-        ordinate.log_prior_P(P_mle, a, b) + \
-        ordinate.log_posterior_Theta(Theta_mle, Yn, Sn_mcmc, model="poisson") + \
-        ordinate.log_posterior_P(P_mle, Sn_extra_mcmc, a, b)
+    log_likelihood = ordinate.log_likelihood(Yn, Theta_mle, P_mle, model="poisson")
+    log_prior_Theta = ordinate.log_prior_Theta(Theta_mle, model="poisson")
+    log_prior_P = ordinate.log_prior_P(P_mle, a, b)
+    log_posterior_Theta = ordinate.log_posterior_Theta(Theta_mle, Yn, Sn_mcmc, model="poisson")
+    log_posterior_P = ordinate.log_posterior_P(P_mle, Sn_extra_mcmc, a, b)
 
-    return Sn, F1_mcmc, F_mcmc, Theta_mcmc, P, marg_lik
+    print log_likelihood, log_prior_Theta, log_prior_P, log_posterior_Theta, log_posterior_P
+
+    marg_lik = log_likelihood + log_prior_Theta + log_prior_P - log_posterior_Theta - log_posterior_P
+
+    return Sn, F1_mcmc, F_mcmc, Theta_mcmc, Theta_mle, P_mle, marg_lik

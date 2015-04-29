@@ -1,8 +1,9 @@
 import full_conditionals as cond
+import full_conditionals_opt as cond_opt
 import numpy as np
 import scipy.stats as st
 
-def S_estep(N, Yn, Theta, P, model):
+def S_estep(N, Yn, Theta, P, model, cond=cond_opt):
     Sn, F, F1 = cond.S_sampling(Yn, Theta, P, model)
     Sns = np.zeros((Sn.shape[0], N))
 

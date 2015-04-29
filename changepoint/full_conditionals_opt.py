@@ -155,7 +155,6 @@ def S_sampling(Yn, Theta, P, model):
         pmfs = F0[t - 1] * P[:, S[t] - 1].T
         pmfs = (1.0 * pmfs / pmfs.sum()).astype('float64') # Not sure why sometimes small number is converted to dtype('O')
         F[t - 1] = pmfs
-        # print "Backward" + str(t), pmfs
         S[t - 1] = np.random.choice(np.arange(1, m + 2), p=pmfs)
 
     return S, F, F1
