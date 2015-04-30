@@ -1,7 +1,7 @@
 import init_functions as init
 import full_conditionals as cond
 import full_conditionals_opt as cond_opt
-import mcem_sampler as mcem
+import mcem_sampler as mcem_samp
 import ordinate as ordinate
 import numpy as np
 import scipy.stats as st
@@ -36,9 +36,11 @@ def sampler(Yn, model, m, cond_module, max_iter=6000, burn_iter=1000):
     elif m == 2:
         a = 5 ; b = 0.1
 
+    Sn_mcmc = np.empty((n, max_iter))
     F1_mcmc = np.empty((n, m + 1, max_iter))
     F_mcmc = np.empty((n, m + 1, max_iter))
     Theta_mcmc = np.empty((m + 1, max_iter))
+    P_mcmc = np.empty((m + 1, m + 1, max_iter))
 
     i = 0
     while (i < max_iter):
@@ -47,12 +49,14 @@ def sampler(Yn, model, m, cond_module, max_iter=6000, burn_iter=1000):
         Theta = cond_module.Theta_sampling(Yn, Sn, model=model)
         P = cond_module.P_sampling(Sn, a, b)
 
+        Sn_mcmc[:, i] = Sn
         F1_mcmc[:, :, i] = F1
         F_mcmc[:, :, i] = F
         Theta_mcmc[:, i] = Theta
+        P_mcmc[:, :, i] = P
         i += 1
 
-    return Sn, F1_mcmc, F_mcmc, Theta_mcmc, P
+    return Sn_mcmc, F1_mcmc, F_mcmc, Theta_mcmc, P_mcmc
 
 def sampler_with_mcem(Yn, model, m, cond_module, mcem_module, ordinate_module, max_iter=6000, burn_iter=1000):
     '''
@@ -75,9 +79,8 @@ def sampler_with_mcem(Yn, model, m, cond_module, mcem_module, ordinate_module, m
     '''
     
     # MCEM to get the MLE estimate
-    Thetas, Theta, P = mcem_module.mcem_sampler(Yn, model, m)
-    Theta_mle = Theta ; P_mle = P
-    # print Theta_mle, P_mle
+    Thetas, Ps = mcem_samp.mcem_sampler(Yn, model, m, mcem_module)
+    Theta_mle = Thetas[:, -1] ; P_mle = Ps[:, :, -1]
 
     # Initialize
     n = len(Yn) ; m = m
@@ -134,7 +137,6 @@ def sampler_with_mcem(Yn, model, m, cond_module, mcem_module, ordinate_module, m
     log_posterior_Theta = ordinate_module.log_posterior_Theta(Theta_mle, Yn, Sn_mcmc, model=model)
     log_posterior_P = ordinate_module.log_posterior_P(P_mle, Sn_extra_mcmc, a, b)
 
-    print log_likelihood, log_prior_Theta, log_prior_P, log_posterior_Theta, log_posterior_P
     marg_lik = log_likelihood + log_prior_Theta + log_prior_P - log_posterior_Theta - log_posterior_P
 
-    return Sn, F1_mcmc, F_mcmc, Theta_mcmc, Theta_mle, P_mle, marg_lik
+    return Sn_mcmc, F1_mcmc, F_mcmc, Theta_mcmc, Theta_mle, P_mle, log_likelihood, marg_lik

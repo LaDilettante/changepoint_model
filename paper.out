@@ -1,4 +1,16 @@
-\BOOKMARK [1][-]{section.1}{This is my paper}{}% 1
-\BOOKMARK [2][-]{subsection.1.1}{Description of the algorithm}{section.1}% 2
-\BOOKMARK [2][-]{subsection.1.2}{Naive version}{section.1}% 3
-\BOOKMARK [2][-]{subsection.1.3}{Profiling}{section.1}% 4
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Model Parameterization}{}% 2
+\BOOKMARK [1][-]{section.3}{MCMC scheme}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{Simulation of st \(forward-backward\)}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Simulation of P}{section.3}% 5
+\BOOKMARK [2][-]{subsection.3.3}{Simulation of }{section.3}% 6
+\BOOKMARK [1][-]{section.4}{MCEM and calculating marginal likelihood}{}% 7
+\BOOKMARK [1][-]{section.5}{Implementation}{}% 8
+\BOOKMARK [1][-]{section.6}{Result}{}% 9
+\BOOKMARK [2][-]{subsection.6.1}{Binary data}{section.6}% 10
+\BOOKMARK [2][-]{subsection.6.2}{Poisson data}{section.6}% 11
+\BOOKMARK [2][-]{subsection.6.3}{Marginal likelihood calculation}{section.6}% 12
+\BOOKMARK [1][-]{section.7}{Code optimization}{}% 13
+\BOOKMARK [1][-]{section.8}{Comparison with existing packages}{}% 14
+\BOOKMARK [2][-]{subsubsection.8.0.1}{MCMCpack implementation of Chib \(1998\)}{section.8}% 15
+\BOOKMARK [3][-]{subsubsection.8.0.2}{bcp Implementation of Barry and Hartigan \(1993\)}{subsubsection.8.0.1}% 16

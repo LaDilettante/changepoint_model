@@ -47,7 +47,9 @@ def Theta_sampling(Yn, Sn, model):
     Uks = Uk(Yn, Sn)
 
     if model == "binary":
-        return st.beta(2 + Uks, 2 + Nks - Uks).rvs()
+        # Prior
+        a = 2 ; b = 2
+        return st.beta(a + Uks, b + Nks - Uks).rvs()
     elif model == "poisson":
         # Different priors based on number of breaks
         if m == 1:
@@ -73,19 +75,13 @@ def P_sampling(Sn, a, b):
 
     i_s = np.arange(1, number_of_regimes) # Skip the last regime
     n_iis = np.array([np.sum(Sn == i) - 1 for i in i_s])
-    p_iis = np.append(st.beta(a + n_iis, b + 1).rvs(), [1])
+
+    p_iis = np.empty(number_of_regimes)
+    p_iis[-1] = 1
+    p_iis[:-1] = st.beta(a + n_iis, b + 1).rvs()
     p_ijs = 1 - p_iis[:-1]
 
     return np.diag(p_iis) + np.diag(p_ijs, k=1)
-
-def fy(t, k, Yn, Theta, model):
-    '''
-    f(y_t | Y_{t - 1})
-    '''
-    if model == "binary":
-        return st.bernoulli.pmf(Yn[t-1], Theta[k-1])
-    elif model == "poisson":
-        return (Theta[k-1] ** Yn[t-1]) * np.exp(-Theta[k-1]) / np.math.factorial(Yn[t-1])
 
 def S_conditional(Yn, Theta, P, model):
     '''
@@ -108,8 +104,11 @@ def S_conditional(Yn, Theta, P, model):
     F0[0, 0] = 1
 
     # f(y_t | Y_{t-1}, \theta_k) for all k's and t's
-    D_t = np.array([[fy(t, k_, Yn, Theta, model) for k_ in range(1, m + 2)] 
-                                                 for t in range(2, n + 1)])
+    ts = np.arange(2, n + 1)
+    if model == "binary":
+        D_t = np.array([st.bernoulli.pmf(Yn[t-1], Theta) for t in ts])
+    if model == "poisson":
+        D_t = np.array([(Theta ** Yn[t-1]) * np.exp(-Theta) / np.math.factorial(Yn[t-1]) for t in ts])
 
     for t in range(2, n + 1): # Forward
         F1[t - 1] = ( F0[t - 2].dot(P) )
@@ -129,9 +128,9 @@ def S_sampling(Yn, Theta, P, model):
 
     F1, F0 = S_conditional(Yn, Theta, P, model=model)
     
-    F = np.zeros((n, m + 1))
+    F = np.empty((n, m + 1))
     F[-1, -1] = 1
-    S = np.zeros(n)
+    S = np.empty(n)
     S[-1] = m + 1
 
     for t in range(n - 1, 0, -1): # Backward

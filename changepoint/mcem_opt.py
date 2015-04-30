@@ -1,11 +1,10 @@
 import full_conditionals_opt as cond_opt
-import mcem as mcem
 import numpy as np
 import scipy.stats as st
 
 def S_estep(N, Yn, Theta, P, model, cond=cond_opt):
     Sn, F, F1 = cond.S_sampling(Yn, Theta, P, model)
-    Sns = np.zeros((Sn.shape[0], N))
+    Sns = np.empty((Sn.shape[0], N))
 
     for N_ in range(N):
         Sn, F, F1 = cond.S_sampling(Yn, Theta, P, model)
@@ -37,7 +36,7 @@ def Theta_mstep(Yn, Sns, model):
         a (m + 1) x 1 vector of parameter, one param for each regime
     '''
     number_of_regimes = len(np.unique(Sns[:, 0]))
-    Theta = np.zeros(number_of_regimes)
+    Theta = np.empty(number_of_regimes)
 
     for k in range(1, number_of_regimes + 1):
         Theta[k - 1] = theta_mstep(k, Yn, Sns, model)
@@ -50,7 +49,7 @@ def p_mstep(i, Sns):
     '''
     n_iis = np.sum(Sns == i, axis=0) - 1
 
-    return 1.0 * n_iis.sum() / (n_iis.sum() + len(n_iis))
+    return 1.0 * n_iis.sum(axis=0) / (n_iis.sum(axis=0) + len(n_iis))
 
 def P_mstep(Sns):
     '''
