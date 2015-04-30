@@ -145,7 +145,7 @@ def S_sampling(Yn, Theta, P, model):
 
     for t in range(n - 1, 0, -1): # Backward
         pmfs = F0[t - 1] * P[:, S[t] - 1].T
-        pmfs = pmfs / pmfs.sum()
+        pmfs = (pmfs / pmfs.sum()).astype('float64')
         F[t - 1] = pmfs
         S[t - 1] = np.random.choice(np.arange(1, m + 2), p=pmfs)
 

@@ -1,9 +1,7 @@
 from changepoint.ordinate import *
 
 def test_log_likelihood():
-    Yn = np.array([3, 4, 2, 3, 5, 4, 2, 4, 7, 3])
-    Theta = np.array([3, 5])
-    P = np.array([0.6, 0.4], [0, 1])
+    pass
 
 def test_log_prior_Theta():
     Theta = np.array([2, 3])

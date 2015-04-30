@@ -4,7 +4,7 @@ import mcem_opt as mcem_opt
 import numpy as np
 import scipy.stats as st
 
-def mcem_sampler(Yn, model, m, mcem, tol=1e-6):
+def mcem_sampler(Yn, model, m, mcem_module, tol=None):
     '''
     Calculate the MLE of Theta and P, using Monte Carlo EM.
     
@@ -41,19 +41,19 @@ def mcem_sampler(Yn, model, m, mcem, tol=1e-6):
         N = Ns[i / 10]
 
         # E-step
-        Sns = mcem.S_estep(N, Yn, Theta, P, model=model)
+        Sns = mcem_module.S_estep(N, Yn, Theta, P, model=model)
 
         # M-step
         Theta_old = Theta
-        Theta = mcem.Theta_mstep(Yn, Sns, model=model)
-        P = mcem.P_mstep(Sns)
+        Theta = mcem_module.Theta_mstep(Yn, Sns, model=model)
+        P = mcem_module.P_mstep(Sns)
 
         # Store Thetas across iterations
         Thetas[:, i] = Theta
         
-        # Stop condition based on convergence
-        #if np.allclose(Theta, Theta_old, atol=tol):
-        #    break
+        #Stop condition based on convergence
+        if (tol is not None) and (np.allclose(Theta, Theta_old, atol=tol)):
+            break
 
         i += 1
 

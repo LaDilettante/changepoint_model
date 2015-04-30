@@ -6,7 +6,7 @@ import ordinate as ordinate
 import numpy as np
 import scipy.stats as st
 
-def sampler(Yn, model, m, cond, max_iter=6000, burn_iter=1000):
+def sampler(Yn, model, m, cond_module, max_iter=6000, burn_iter=1000):
     '''
     Detect the location of change points
 
@@ -43,9 +43,9 @@ def sampler(Yn, model, m, cond, max_iter=6000, burn_iter=1000):
     i = 0
     while (i < max_iter):
 
-        Sn, F, F1 = cond.S_sampling(Yn, Theta, P, model=model)
-        Theta = cond.Theta_sampling(Yn, Sn, model=model)
-        P = cond.P_sampling(Sn, a, b)
+        Sn, F, F1 = cond_module.S_sampling(Yn, Theta, P, model=model)
+        Theta = cond_module.Theta_sampling(Yn, Sn, model=model)
+        P = cond_module.P_sampling(Sn, a, b)
 
         F1_mcmc[:, :, i] = F1
         F_mcmc[:, :, i] = F
@@ -54,7 +54,7 @@ def sampler(Yn, model, m, cond, max_iter=6000, burn_iter=1000):
 
     return Sn, F1_mcmc, F_mcmc, Theta_mcmc, P
 
-def sampler_with_mcem(Yn, model, m, cond, max_iter=6000, burn_iter=1000):
+def sampler_with_mcem(Yn, model, m, cond_module, mcem_module, ordinate_module, max_iter=6000, burn_iter=1000):
     '''
     Detect the location of change points and calculate marginal likelihood
     
@@ -75,7 +75,7 @@ def sampler_with_mcem(Yn, model, m, cond, max_iter=6000, burn_iter=1000):
     '''
     
     # MCEM to get the MLE estimate
-    Thetas, Theta, P = mcem.mcem_sampler(Yn, model, m)
+    Thetas, Theta, P = mcem_module.mcem_sampler(Yn, model, m)
     Theta_mle = Theta ; P_mle = P
     # print Theta_mle, P_mle
 
@@ -111,9 +111,9 @@ def sampler_with_mcem(Yn, model, m, cond, max_iter=6000, burn_iter=1000):
         # print "Iteration" + str(i)
         # print P, Theta
 
-        Sn, F, F1 = cond.S_sampling(Yn, Theta, P, model=model)
-        Theta = cond.Theta_sampling(Yn, Sn, model=model)
-        P = cond.P_sampling(Sn, a, b)
+        Sn, F, F1 = cond_module.S_sampling(Yn, Theta, P, model=model)
+        Theta = cond_module.Theta_sampling(Yn, Sn, model=model)
+        P = cond_module.P_sampling(Sn, a, b)
 
         # Additional sampling of Sn for marginal likelihood
         Sn_extra, F, F1 = cond.S_sampling(Yn, Theta_mle, P, model=model)
@@ -128,11 +128,11 @@ def sampler_with_mcem(Yn, model, m, cond, max_iter=6000, burn_iter=1000):
         i += 1
 
     # Calculate marginal likelihood
-    log_likelihood = ordinate.log_likelihood(Yn, Theta_mle, P_mle, model=model)
-    log_prior_Theta = ordinate.log_prior_Theta(Theta_mle, model=model)
-    log_prior_P = ordinate.log_prior_P(P_mle, a, b)
-    log_posterior_Theta = ordinate.log_posterior_Theta(Theta_mle, Yn, Sn_mcmc, model=model)
-    log_posterior_P = ordinate.log_posterior_P(P_mle, Sn_extra_mcmc, a, b)
+    log_likelihood = ordinate_module.log_likelihood(Yn, Theta_mle, P_mle, model=model)
+    log_prior_Theta = ordinate_module.log_prior_Theta(Theta_mle, model=model)
+    log_prior_P = ordinate_module.log_prior_P(P_mle, a, b)
+    log_posterior_Theta = ordinate_module.log_posterior_Theta(Theta_mle, Yn, Sn_mcmc, model=model)
+    log_posterior_P = ordinate_module.log_posterior_P(P_mle, Sn_extra_mcmc, a, b)
 
     print log_likelihood, log_prior_Theta, log_prior_P, log_posterior_Theta, log_posterior_P
     marg_lik = log_likelihood + log_prior_Theta + log_prior_P - log_posterior_Theta - log_posterior_P
